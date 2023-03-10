@@ -13,15 +13,8 @@ db.once("open", () => console.log("Connected to Database"))
 const app = new Koa();
 const router = new Router(); 
 
-router.get("/feb/:id", ctx => {
-    ctx.body = {
-        Day: ctx.params.id,
-        weather: 'rainy'
-    }
-})
-
 const newsRouter = require('./routes/newsRoutes')
-app.use('/newsRoutes', newsRouter)
+app.use(newsRouter.routes())
 
 app.use(router.routes()).use(router.allowedMethods());
 
