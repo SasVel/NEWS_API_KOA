@@ -1,29 +1,31 @@
 const Koa = require("Koa")
-const Router = require("koa-router")
+const Router = require("koa-router");
 const router = new Router(); 
 const Gossip = require('../models/gossip')
 
 router.get('/gossip', async ctx => {
     try {
-        ctx.body = {
-            //Id: ctx.params.id,
-            gossip: JSON.stringify( await Gossip.find())
-        }
-        ctx.response.status = 200;
+        let gossipEntries = await Gossip.find();
+        ctx.body = gossipEntries;
     } catch (err) {
         console.log(err);
     }
     
 })
 
-router.post('/gossip', async ctx => {
+router.post('/gossip', async (ctx, next) => {
     try {
-        ctx.body = {
-            
-        }
-    } catch (error) {
-        
+        console.log(ctx.request.body)
+        ctx.response.body = ctx.body
+
+        return (true)
+    } catch (err) {
+        console.log(err.message)
     }
+    next
 })
+
+
+
 
 module.exports = router;

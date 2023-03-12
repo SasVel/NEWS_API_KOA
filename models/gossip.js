@@ -10,7 +10,7 @@ const gossipSchema = new mongoose.Schema({
         required: true,
         default: Date.now  
     },
-    goosip: {
+    gossip: {
         type: String,
         required: true
     }
