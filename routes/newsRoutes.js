@@ -3,7 +3,8 @@ const Router = require("koa-router");
 const router = new Router(); 
 const Gossip = require('../models/gossip')
 
-router.get('/gossip', async ctx => {
+//GetAll request
+router.get('/gossips', async ctx => {
     try {
         let gossipEntries = await Gossip.find();
         ctx.body = gossipEntries;
@@ -12,12 +13,17 @@ router.get('/gossip', async ctx => {
     }
     
 })
-
+//Post request
 router.post('/gossip', async (ctx, next) => {
     try {
-        console.log(ctx.request.body)
-        ctx.response.body = ctx.body
-
+        const reqBody = ctx.request.body;
+        const entry = new Gossip({
+            reporterName: reqBody.reporterName,
+            gossip: reqBody.gossip
+        })
+        const newEntry = await entry.save();
+        ctx.response.body = newEntry
+        ctx.response.status = 201
         return (true)
     } catch (err) {
         console.log(err.message)
