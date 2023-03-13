@@ -3,7 +3,7 @@ const Router = require("koa-router");
 const router = new Router(); 
 const Gossip = require('../models/gossip')
 
-//GetAll request
+//Get All request
 router.get('/gossips', async ctx => {
     try {
         let gossipEntries = await Gossip.find();
@@ -13,6 +13,18 @@ router.get('/gossips', async ctx => {
     }
     
 })
+
+//Get by Id
+router.get('/gossip/:id', async ctx => {
+    try {
+        let gossipEntry = await Gossip.findById(ctx.params.id);
+        ctx.body = gossipEntry;
+    } catch (err) {
+        console.log(err);
+    }
+    
+})
+
 //Post request
 router.post('/gossip', async (ctx, next) => {
     try {
@@ -24,11 +36,24 @@ router.post('/gossip', async (ctx, next) => {
         const newEntry = await entry.save();
         ctx.response.body = newEntry
         ctx.response.status = 201
-        return (true)
+        return ((true))
     } catch (err) {
         console.log(err.message)
     }
     next
+})
+
+//Delete By Id request
+router.delete('/gossip/:id', async ctx => {
+    try {
+        let gossipEntry = await Gossip.findById(ctx.params.id);
+        gossipEntry.deleteOne()
+        ctx.body = 'Deleted successfully';
+    } catch (err) {
+        ctx.body = 'Deleted unsuccessfully';
+        console.log(err);
+    }
+    
 })
 
 
