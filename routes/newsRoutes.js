@@ -2,6 +2,7 @@ const Koa = require("Koa")
 const Router = require("koa-router");
 const router = new Router(); 
 const Article = require('../models/article')
+const dayjs = require('dayjs');
 
 //Get All request
 router.get('/articles', async ctx => {
@@ -19,6 +20,20 @@ router.get('/article/:id', async ctx => {
     try {
         let articleEntry = await getArticleById(ctx);
         ctx.body = articleEntry;
+    } catch (err) {
+        console.log(err);
+    }
+    
+})
+
+//Get by parameters
+router.get('/article', async ctx => {
+    try {
+        let query = ctx.request.query;
+        console.log(query.reporterName)
+        let articleEntries = await Article.find( 
+            { date: { $gte: dayjs(query.fromDate), $lte: dayjs(query.toDate) }, reporterName: { $eq: query.reporterName } } )
+        ctx.body = articleEntries;
     } catch (err) {
         console.log(err);
     }

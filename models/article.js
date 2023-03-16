@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
 
 let date = new Date()
 const articleSchema = new mongoose.Schema({
@@ -12,9 +15,9 @@ const articleSchema = new mongoose.Schema({
         default: `${date.getHours()}:${date.getMinutes()}`
     },
     date: {
-        type: String,
+        type: Date,
         required: true,
-        default: `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+        default: dayjs().local().format()
     },
     title: {
         type: String,
