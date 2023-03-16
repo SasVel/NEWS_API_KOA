@@ -1,13 +1,13 @@
 const Koa = require("Koa")
 const Router = require("koa-router");
 const router = new Router(); 
-const Gossip = require('../models/gossip')
+const Article = require('../models/article')
 
 //Get All request
-router.get('/gossips', async ctx => {
+router.get('/articles', async ctx => {
     try {
-        let gossipEntries = await Gossip.find();
-        ctx.body = gossipEntries;
+        let articleEntries = await Article.find();
+        ctx.body = articleEntries;
     } catch (err) {
         console.log(err);
     }
@@ -15,10 +15,10 @@ router.get('/gossips', async ctx => {
 })
 
 //Get by Id
-router.get('/gossip/:id', async ctx => {
+router.get('/article/:id', async ctx => {
     try {
-        let gossipEntry = await getGossip(ctx);
-        ctx.body = gossipEntry;
+        let articleEntry = await getGossip(ctx);
+        ctx.body = articleEntry;
     } catch (err) {
         console.log(err);
     }
@@ -26,12 +26,14 @@ router.get('/gossip/:id', async ctx => {
 })
 
 //Post request
-router.post('/gossip', async (ctx, next) => {
+router.post('/article', async (ctx, next) => {
     try {
         const reqBody = ctx.request.body;
-        const entry = new Gossip({
+        const entry = new Article({
             reporterName: reqBody.reporterName,
-            gossip: reqBody.gossip
+            title: reqBody.title,
+            body: reqBody.body,
+            tldr: reqBody.tldr
         })
         const newEntry = await entry.save();
         ctx.response.body = newEntry
@@ -85,7 +87,7 @@ async function getGossip(ctx)
 {
     let gossipEntry
     try {
-         gossipEntry = await Gossip.findById(ctx.params.id);
+         gossipEntry = await Article.findById(ctx.params.id);
         if (gossipEntry == null) {
             
             ctx.response.status = 404;
