@@ -17,7 +17,7 @@ router.get('/articles', async ctx => {
 //Get by Id
 router.get('/article/:id', async ctx => {
     try {
-        let articleEntry = await getGossip(ctx);
+        let articleEntry = await getArticleById(ctx);
         ctx.body = articleEntry;
     } catch (err) {
         console.log(err);
@@ -46,10 +46,10 @@ router.post('/article', async (ctx, next) => {
 })
 
 //Delete By Id request
-router.delete('/gossip/:id', async ctx => {
+router.delete('/article/:id', async ctx => {
     try {
-        let gossipEntry = await getGossip(ctx)
-        gossipEntry.deleteOne()
+        let articleEntry = await getArticleById(ctx)
+        articleEntry.deleteOne()
         ctx.body = 'Deleted successfully';
     } catch (err) {
         ctx.body = 'Deleted unsuccessfully';
@@ -59,19 +59,19 @@ router.delete('/gossip/:id', async ctx => {
 })
 
 //Edit By Id request
-router.patch('/gossip/:id', async ctx => {
+router.patch('/article/:id', async ctx => {
     try {
         let reqBody = ctx.request.body;
-        let gossipEntry = await getGossip(ctx)
+        let articleEntry = await getArticleById(ctx)
         if (reqBody != null) {
             if (reqBody.reporterName != null) {
-                gossipEntry.reporterName = reqBody.reporterName;
+                articleEntry.reporterName = reqBody.reporterName;
             }
             if (reqBody.gossip != null) {
-                gossipEntry.gossip = reqBody.gossip;
+                articleEntry.gossip = reqBody.gossip;
             }
         }
-        const editedEntry = await gossipEntry.save();
+        const editedEntry = await articleEntry.save();
         ctx.response.body = editedEntry
         ctx.response.status = 200
 
@@ -83,17 +83,17 @@ router.patch('/gossip/:id', async ctx => {
 })
 
 
-async function getGossip(ctx)
+async function getArticleById(ctx)
 {
-    let gossipEntry
+    let articleEntry
     try {
-         gossipEntry = await Article.findById(ctx.params.id);
-        if (gossipEntry == null) {
+         articleEntry = await Article.findById(ctx.params.id);
+        if (articleEntry == null) {
             
             ctx.response.status = 404;
             return null
         }
-        return gossipEntry;
+        return articleEntry;
     } catch (err) {
         console.log(err);
         return ctx.response.status = 500;
