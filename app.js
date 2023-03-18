@@ -1,9 +1,10 @@
-require("dotenv").config()
+import dotenv from "dotenv"
+dotenv.config()
 
-const Koa = require("Koa")
-const Router = require("koa-router")
-const mongoose = require("mongoose")
-const bodyParser = require("koa-bodyparser")
+import Koa from "Koa"
+import Router from "koa-router"
+import mongoose from "mongoose"
+import bodyParser from "koa-bodyparser"
 
 mongoose.connect(process.env.DATABASE_URL)
 const db = mongoose.connection
@@ -14,7 +15,7 @@ db.once("open", () => console.log("Connected to Database"))
 const app = new Koa();
 const router = new Router(); 
 
-const newsRouter = require('./routes/newsRoutes')
+import newsRouter from './routes/newsRoutes.js'
 app.use(bodyParser())
 app.use(newsRouter.routes())
 

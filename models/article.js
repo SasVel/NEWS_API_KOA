@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const dayjs = require('dayjs');
-const utc = require('dayjs/plugin/utc')
+import mongoose from 'mongoose'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc.js'
 dayjs.extend(utc)
 
 let date = new Date()
@@ -32,4 +32,4 @@ const articleSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('Articles', articleSchema);
+export default mongoose.model('Articles', articleSchema);

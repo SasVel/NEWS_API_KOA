@@ -1,13 +1,14 @@
-const Koa = require("Koa")
-const Router = require("koa-router");
+import Koa from "Koa";
+import Router from "koa-router";
 const router = new Router(); 
-const Article = require('../models/article')
-const dayjs = require('dayjs');
+import Article from '../models/article.js';
+import { getAllArticles, getArticleById, getArticlesByParameters } from '../services/newsService.js';
+
 
 //Get All request
 router.get('/articles', async ctx => {
     try {
-        let articleEntries = await Article.find();
+        let articleEntries = await getAllArticles(ctx)
         ctx.body = articleEntries;
     } catch (err) {
         console.log(err);
@@ -18,7 +19,7 @@ router.get('/articles', async ctx => {
 //Get by Id
 router.get('/article/:id', async ctx => {
     try {
-        let articleEntry = await getArticleById(ctx);
+        let articleEntry = await getArticleById(ctx)
         ctx.body = articleEntry;
     } catch (err) {
         console.log(err);
@@ -30,9 +31,8 @@ router.get('/article/:id', async ctx => {
 router.get('/article', async ctx => {
     try {
         let query = ctx.request.query;
-        console.log(query.reporterName)
-        let articleEntries = await Article.find( 
-            { date: { $gte: dayjs(query.fromDate), $lte: dayjs(query.toDate) }, reporterName: { $eq: query.reporterName } } )
+        console.log(query.includes)
+        let articleEntries = await getArticlesByParameters(ctx)
         ctx.body = articleEntries;
     } catch (err) {
         console.log(err);
@@ -98,22 +98,7 @@ router.patch('/article/:id', async ctx => {
 })
 
 
-async function getArticleById(ctx)
-{
-    let articleEntry
-    try {
-         articleEntry = await Article.findById(ctx.params.id);
-        if (articleEntry == null) {
-            
-            ctx.response.status = 404;
-            return null
-        }
-        return articleEntry;
-    } catch (err) {
-        console.log(err);
-        return ctx.response.status = 500;
-    }
-}
 
 
-module.exports = router;
+
+export default router;
