@@ -22,3 +22,5 @@ app.use(newsRouter.routes())
 app.use(router.routes()).use(router.allowedMethods());
 
 app.listen(process.env.API_PORT);
+
+module.exports = app.listen(process.env.API_PORT);

@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import Router from "koa-router";
 const router = new Router(); 
 
-export async function getAllArticles(ctx)
+export async function getAllArticles()
 {
     return Article.find();
 }

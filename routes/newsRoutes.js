@@ -8,7 +8,7 @@ import { getAllArticles, getArticleById, getArticlesByParameters } from '../serv
 //Get All request
 router.get('/articles', async ctx => {
     try {
-        let articleEntries = await getAllArticles(ctx)
+        let articleEntries = await getAllArticles()
         ctx.body = articleEntries;
     } catch (err) {
         console.log(err);
